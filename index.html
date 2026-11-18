@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nedtelling til GTA VI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;800&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Dag: solnedgang over stranda */
+    --sky1: #FFE3C2; --sky2: #FFC0A0; --sky3: #F79AA6; --sky4: #E57BA8;
+    --panel: #F6B9A6;
+    --ink: #2B0F3A;
+    --muted: #5E2A52;
+    --accent: #A3104F;
+    --warm: #B23A00;
+    --rule: rgba(43, 15, 58, .22);
+    --palm: rgba(43, 15, 58, .16);
+    --glow: 0em;
+    --frame-glow: 0px;
+    --display: "Big Shoulders Display", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+    --text: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+  @media all { /* låst til mørk: kiosk-Chromium melder lys modus */
+    :root {
+      color-scheme: dark;
+      /* Natt: neon etter at sola har gått ned */
+      --sky1: #140A33; --sky2: #3D1259; --sky3: #8E1F6B; --sky4: #C8436B;
+      --panel: #1D0D3F;
+      --ink: #FFF1E0;
+      --muted: #F0C6DC;
+      --accent: #FF6BAA;
+      --warm: #FFC857;
+      --rule: rgba(255, 241, 224, .22);
+      --palm: rgba(10, 4, 25, .6);
+      --glow: .12em;
+      --frame-glow: 4vh;
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body {
+    background: linear-gradient(to bottom, var(--sky1), var(--sky2) 45%, var(--sky3) 82%, var(--sky4)) fixed;
+    color: var(--ink);
+    font-family: var(--text);
+    cursor: none;              /* kiosk: ingen musepeker */
+    overflow: hidden;
+  }
+
+  /* Palmesilhuetter bak innholdet */
+  .palms { position: fixed; inset: 0; z-index: 0; pointer-events: none; fill: var(--palm); }
+  .palms svg { position: absolute; bottom: 0; }
+  .palms .tall  { right: -3vw; height: 88vh; }
+  .palms .short { right: 15vw; height: 56vh; transform: scaleX(-1); }
+
+  .screen {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(260px, 30vw, 620px);
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 3vh 3vw;
+    padding: 5vh 4vw 4vh;
+  }
+
+  /* Trailer i neonramme */
+  .trailer {
+    align-self: center;
+    aspect-ratio: 16 / 9;
+    max-height: 100%;
+    width: 100%;
+    background: var(--panel);
+    border: 3px solid var(--accent);
+    border-radius: 1.2vh;
+    box-shadow: 0 0 var(--frame-glow) color-mix(in srgb, var(--accent) 55%, transparent);
+    overflow: hidden;
+  }
+  .trailer iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+  /* Nedtelling */
+  .count {
+    align-self: center;
+    display: grid;
+    gap: 1vh;
+  }
+  .count h1 {
+    font: 600 clamp(16px, 2.6vh, 34px)/1.2 var(--text);
+    color: var(--muted);
+    margin-bottom: 1.5vh;
+  }
+  .unit {
+    display: grid;
+    grid-template-columns: 2.1ch 1fr;
+    align-items: baseline;
+    column-gap: 1.2vw;
+    font: 800 clamp(56px, 17vh, 230px)/.88 var(--display);
+    font-variant-numeric: tabular-nums;
+    border-top: 2px solid var(--rule);
+    padding-top: 1.2vh;
+  }
+  .unit b {
+    font-weight: 800;
+    text-align: right;
+    text-shadow: 0 0 var(--glow) color-mix(in srgb, currentColor 65%, transparent);
+  }
+  .unit span {
+    font: 400 clamp(15px, 2.6vh, 34px)/1 var(--text);
+    color: var(--muted);
+  }
+  .unit:first-of-type b { color: var(--accent); }
+  .unit:last-of-type b { color: var(--warm); }
+
+  .out {
+    font: 800 clamp(72px, 24vh, 320px)/.9 var(--display);
+    color: var(--accent);
+    text-shadow: 0 0 var(--glow) color-mix(in srgb, currentColor 65%, transparent);
+  }
+  [hidden] { display: none !important; }
+
+  /* Bunnlinje */
+  .foot {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    gap: 2vw;
+    border-top: 2px solid var(--rule);
+    padding-top: 2vh;
+    font-size: clamp(14px, 2.3vh, 30px);
+    color: var(--ink);
+  }
+  .foot strong { font-weight: 600; }
+
+  /* Stående / smal skjerm */
+  @media (max-aspect-ratio: 1/1) {
+    body { overflow: auto; }
+    .screen { grid-template-columns: 1fr; grid-template-rows: auto auto auto; height: auto; min-height: 100%; }
+    .unit { font-size: clamp(56px, 20vw, 200px); }
+    .foot { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="palms" aria-hidden="true">
+  <svg style="display:none"><defs>
+    <path id="leaf" d="M0 0 C40 -45 110 -50 165 8 C110 -20 45 -16 0 0 Z"/>
+    <g id="palm">
+      <path d="M138 520 C150 400 150 280 171 150 L187 152 C169 280 171 400 168 520 Z"/>
+      <g transform="translate(179 152)">
+        <use href="#leaf" transform="rotate(22)"/><use href="#leaf" transform="rotate(-14)"/><use href="#leaf" transform="rotate(-50)"/>
+        <use href="#leaf" transform="rotate(-86)"/>
+        <g transform="scale(-1 1)"><use href="#leaf" transform="rotate(22)"/><use href="#leaf" transform="rotate(-14)"/><use href="#leaf" transform="rotate(-50)"/></g>
+      </g>
+    </g>
+  </defs></svg>
+  <svg class="tall" viewBox="0 0 360 520"><use href="#palm"/></svg>
+  <svg class="short" viewBox="0 0 360 520"><use href="#palm"/></svg>
+</div>
+<main class="screen">
+  <div class="trailer"><iframe id="player" title="Trailer" allow="autoplay; encrypted-media; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+
+  <section class="count" aria-live="off">
+    <h1 id="heading">Grand Theft Auto VI slippes om</h1>
+    <div id="units">
+      <p class="unit"><b id="d">0</b><span id="dl">dager</span></p>
+      <p class="unit"><b id="h">00</b><span id="hl">timer</span></p>
+      <p class="unit"><b id="m">00</b><span id="ml">minutter</span></p>
+      <p class="unit"><b id="s">00</b><span id="sl">sekunder</span></p>
+    </div>
+    <p class="out" id="out" hidden>Ute nå</p>
+  </section>
+
+  <footer class="foot">
+    <p><strong id="date"></strong></p>
+    <p>PlayStation 5 og Xbox Series X|S</p>
+  </footer>
+</main>
+
+<script>
+  /* ---------- Innstillinger ---------- */
+  const RELEASE = new Date("2026-11-19T00:00:00+01:00"); // norsk tid, uavhengig av Pi-ens tidssone
+  const VIDEOS  = ["QdBZY2fkU-0", "VQRLujxTm3c"];    // YouTube-ID-er, spilles i løkke
+  const MUTED   = true;                               // false krever Chromium-flagget
+                                                      // --autoplay-policy=no-user-gesture-required
+  /* ----------------------------------- */
+
+  const $ = id => document.getElementById(id);
+  const pad = n => String(n).padStart(2, "0");
+
+  // Trailer
+  const rest = VIDEOS.length > 1 ? VIDEOS.slice(1) : VIDEOS;
+  $("player").src = "https://www.youtube-nocookie.com/embed/" + VIDEOS[0] +
+    "?autoplay=1&loop=1&controls=0&rel=0&playsinline=1&mute=" + (MUTED ? 1 : 0) +
+    "&playlist=" + rest.join(",");
+
+  // Dato i bunnlinjen
+  const dateText = RELEASE.toLocaleDateString("nb-NO",
+    { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  $("date").textContent = dateText.charAt(0).toUpperCase() + dateText.slice(1);
+
+  // Nedtelling
+  function tick() {
+    const left = RELEASE - Date.now();
+    if (left <= 0) {
+      $("units").hidden = true;
+      $("out").hidden = false;
+      $("heading").textContent = "Grand Theft Auto VI";
+      return;
+    }
+    const t = Math.floor(left / 1000);
+    const d = Math.floor(t / 86400), h = Math.floor(t % 86400 / 3600),
+          m = Math.floor(t % 3600 / 60), s = t % 60;
+    $("d").textContent = d;       $("dl").textContent = d === 1 ? "dag" : "dager";
+    $("h").textContent = pad(h);  $("hl").textContent = h === 1 ? "time" : "timer";
+    $("m").textContent = pad(m);  $("ml").textContent = m === 1 ? "minutt" : "minutter";
+    $("s").textContent = pad(s);  $("sl").textContent = s === 1 ? "sekund" : "sekunder";
+  }
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
