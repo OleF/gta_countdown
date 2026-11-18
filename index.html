@@ -35,8 +35,9 @@
       --warm: #FFC857;
       --rule: rgba(255, 241, 224, .22);
       --palm: rgba(10, 4, 25, .6);
-      --glow: .12em;
-      --frame-glow: 4vh;
+      /* glød av: test om skyggene får videoen til å hakke på Pi */
+      --glow: 0em;
+      --frame-glow: 0px;
     }
   }
 
@@ -75,7 +76,6 @@
     width: 100%;
     background: var(--panel);
     border: 3px solid var(--accent);
-    border-radius: 1.2vh;
     box-shadow: 0 0 var(--frame-glow) color-mix(in srgb, var(--accent) 55%, transparent);
     overflow: hidden;
   }
